@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Navbar with centered h1 -->
+    <nav>
+      <h1>Assignment Manager</h1>
+    </nav>
+
+    <!-- Form to add new assignments -->
+    <div id="assignment-form">
+      <input type="text" id="title" placeholder="Assignment Title" required />
+      <textarea
+        id="description"
+        placeholder="Assignment Description"
+        required
+      ></textarea>
+      <input type="date" id="due-date" required />
+      <input type="time" id="due-time" required />
+      <button onclick="addAssignment()">Add Assignment</button>
+    </div>
+
+    <!-- Edit Form for Assignment -->
+    <div id="edit-form" style="display: none">
+      <input
+        type="text"
+        id="edit-title"
+        placeholder="Assignment Title"
+        required
+      />
+      <textarea
+        id="edit-description"
+        placeholder="Assignment Description"
+        required
+      ></textarea>
+      <input type="date" id="edit-due-date" required />
+      <input type="time" id="edit-due-time" required />
+      <button onclick="updateAssignment()">Update Assignment</button>
+      <button onclick="cancelEdit()">Cancel</button>
+    </div>
+
+    <h2>Your Assignments</h2>
+    <table id="assignment-list">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Due Date & Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Assignment list will be populated here -->
+      </tbody>
+    </table>
+
+    <script src="script.js"></script>
+  </body>
+</html>
