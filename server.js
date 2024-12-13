@@ -34,42 +34,29 @@ app.get("/assignments", (req, res) => {
   });
 });
 
-// Get a specific assignment by ID
-app.get("/assignments/:id", (req, res) => {
-  const id = req.params.id;
-  db.query("SELECT * FROM assignments WHERE id = ?", [id], (err, results) => {
-    if (err) {
-      console.error("Error fetching assignment: ", err);
-      res.status(500).send("Error fetching assignment");
-      return;
-    }
-    if (results.length > 0) {
-      res.json(results[0]);
-    } else {
-      res.status(404).send("Assignment not found");
-    }
-  });
-});
-
 // Add a new assignment
 app.post("/assignments", (req, res) => {
   const { title, description, dueDateTime, status } = req.body;
   const query =
     "INSERT INTO assignments (title, description, due_date, status) VALUES (?, ?, ?, ?)";
-  db.query(query, [title, description, dueDateTime, status], (err, result) => {
-    if (err) {
-      console.error("Error adding assignment: ", err);
-      res.status(500).send("Error adding assignment");
-      return;
+  db.query(
+    query,
+    [title, description, dueDateTime, status || false],
+    (err, result) => {
+      if (err) {
+        console.error("Error adding assignment: ", err);
+        res.status(500).send("Error adding assignment");
+        return;
+      }
+      res.json({
+        id: result.insertId,
+        title,
+        description,
+        due_date: dueDateTime,
+        status,
+      });
     }
-    res.json({
-      id: result.insertId,
-      title,
-      description,
-      due_date: dueDateTime,
-      status,
-    });
-  });
+  );
 });
 
 // Update assignment status
@@ -82,7 +69,11 @@ app.patch("/assignments/:id/status", (req, res) => {
       res.status(500).send("Error updating status");
       return;
     }
-    res.json({ id, status: result.affectedRows > 0 ? "Updated" : "Not Found" });
+    if (result.affectedRows > 0) {
+      res.json({ id, status: "Updated" });
+    } else {
+      res.status(404).send("Assignment not found");
+    }
   });
 });
 
